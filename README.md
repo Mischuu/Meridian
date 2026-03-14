@@ -4,6 +4,8 @@
 
 **Live Demo:** https://meridian-lac-seven.vercel.app/
 
+![Meridian Dashboard](./public/screenshot.png)
+
 ---
 
 ## What it does
