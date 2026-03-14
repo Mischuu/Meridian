@@ -2,15 +2,13 @@
 
 > Learn investing with $10,000 of paper money, live market data, and an AI tutor that explains everything in plain English.
 
-![Meridian Dashboard](./public/screenshot.png)
-
-🔗 **Live Demo:** [your-app.vercel.app](https://your-app.vercel.app)
+**Live Demo:** https://meridian-lac-seven.vercel.app/
 
 ---
 
 ## What it does
 
-Most students want to learn investing but are afraid to lose real money. Meridian gives them a safe environment to practice — with real market data, a fake $10,000 starting balance, and an AI assistant that explains concepts as they trade.
+Most students want to learn investing but are afraid to lose real money. Meridian gives them a safe environment to practice, with real market data, a fake $10,000 starting balance, and an AI assistant that explains concepts as they trade.
 
 It's not a toy. It uses live prices from Yahoo Finance, real news, and Google Gemini to provide analysis — but no real money ever changes hands.
 
@@ -18,32 +16,32 @@ It's not a toy. It uses live prices from Yahoo Finance, real news, and Google Ge
 
 ## Features
 
-### 📈 Paper Trading
+### Paper Trading
 - Start with **$10,000** in virtual cash
 - **Buy and sell** any of 20 stocks with one tap
 - Real-time P&L tracking per position
 - Full trade history log
 - **Leaderboard** — compete with other students
 
-### 📊 Live Market Data
+### Live Market Data
 - Real prices via **Yahoo Finance** (refreshed every 60 seconds)
 - 60-day price charts with historical data
 - Key metrics: P/E, EPS, Beta, 52-week range, volume
 - Market indices bar: S&P 500, NASDAQ, DOW, VIX, BTC, Gold
 
-### 🤖 AI Layer (Google Gemini)
+### AI Layer (Google Gemini)
 - **"What does this company do?"** — plain English explanation for every stock
 - **News summarization** — themes, risks, sentiment from recent headlines
 - **Investment view** — structured bull/bear case with risk label
 - **AI Chat** — ask anything about your portfolio, a stock, or how markets work
 - AI never fabricates prices or data — it only interprets what's already on screen
 
-### 🔍 Stock Screener
+### Stock Screener
 - Filter by sector, sort by price, P/E, beta, daily change
 - Risk labels on every stock: Conservative / Moderate / Aggressive
 - Direct buy button from screener
 
-### 🎓 Student-Friendly Design
+### Student-Friendly Design
 - Plain-English company descriptions on every stock page
 - Hover tooltips explaining financial terms (P/E, Beta, EPS)
 - Clean, minimal interface inspired by GoodNotes
@@ -53,7 +51,6 @@ It's not a toy. It uses live prices from Yahoo Finance, real news, and Google Ge
 ## Tech Stack
 
 | Layer | Technology |
-|---|---|
 | Frontend | React + Recharts |
 | Hosting | Vercel |
 | Market Data | Yahoo Finance (`yahoo-finance2`) |
@@ -79,7 +76,6 @@ The app is built on a strict separation between the **data layer** and the **AI 
 │  /api/news.js    │                      │
 │  → Yahoo Finance │                      │
 └──────────────────┴──────────────────────┘
-```
 
 **AI is never used for:**
 - Stock prices or quotes
@@ -116,7 +112,7 @@ npx vercel dev
 
 Get a free Gemini API key at [aistudio.google.com](https://aistudio.google.com) — no credit card needed.
 
----
+
 
 ## Project Structure
 
@@ -137,8 +133,7 @@ meridian/
 
 ## Why I built this
 
-I'm a student and most investing tools are built for professionals — full of jargon, real money risk, and no explanation of what anything means. I wanted something that feels like a learning tool first and a trading platform second.
-
+I'm a student and most investing tools are built for professionals. Full of jargon, real money risk, and no explanation of what anything means. I wanted something that feels like a learning tool first and a trading platform second.
 The AI layer was designed to teach, not to replace thinking. It explains, it summarizes, it answers questions — but it never makes decisions for you.
 
 ---
