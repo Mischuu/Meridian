@@ -1,21 +1,4 @@
-/**
- * MERIDIAN — Paper Trading Platform v5
- * 
- * What's new in v5:
- * - Fixed chat input focus bug (isolated ChatPanel with React.memo)
- * - Full-width layout
- * - Firebase auth + Firestore (paste your config in FIREBASE_CONFIG)
- * - Onboarding flow (interests → starter stocks → learning goal)
- * - Fractional shares (buy by $ amount OR shares)
- * - 10 new tickers including crypto proxies
- * - AI market brief + sentiment on Home
- * - Live price pulse animation on update
- * - Learning tooltips on P/E, Beta, EPS, Market Cap
- * - Logo fix (Paper Trading below Meridian)
- * - Leaderboard shows only real users (no fake names)
- * - Longer company descriptions
- * - UX market sentiment widget
- */
+
 
 import { useState, useRef, useEffect, useMemo, useCallback, memo } from "react";
 import {
@@ -23,13 +6,8 @@ import {
   XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, ReferenceLine,
 } from "recharts";
 
-// ─────────────────────────────────────────────
-// FIREBASE — proper Vite imports
-// Keys are loaded from .env.local:
-//   VITE_FIREBASE_API_KEY=...
-//   VITE_FIREBASE_AUTH_DOMAIN=...
-//   VITE_FIREBASE_PROJECT_ID=...
-// ─────────────────────────────────────────────
+// FIREBASE: Vite imports
+
 import { initializeApp, getApps } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
@@ -215,9 +193,9 @@ const fmt = {
 const card  = (x={}) => ({background:T.surface,border:`1px solid ${T.border}`,borderRadius:T.r,padding:18,...x});
 const lbl   = {fontSize:11,color:T.muted,fontWeight:600,letterSpacing:"0.06em",textTransform:"uppercase",marginBottom:6};
 
-// ─────────────────────────────────────────────
+
 // TOOLTIP COMPONENT
-// ─────────────────────────────────────────────
+
 function InfoTip({ term }) {
   const [show, setShow] = useState(false);
   const tip = TOOLTIPS[term];
@@ -240,9 +218,9 @@ function InfoTip({ term }) {
   );
 }
 
-// ─────────────────────────────────────────────
+
 // AI PANEL
-// ─────────────────────────────────────────────
+
 function AIPanel({ text, loading, error, label }) {
   if (!loading&&!text&&!error) return null;
   return (
@@ -262,9 +240,8 @@ function AIPanel({ text, loading, error, label }) {
   );
 }
 
-// ─────────────────────────────────────────────
 // PRICE CELL with pulse animation
-// ─────────────────────────────────────────────
+
 function PriceCell({ value, up }) {
   const [pulse, setPulse] = useState(null);
   const prev = useRef(value);
@@ -295,9 +272,9 @@ const ChartTip = ({ active, payload }) => active&&payload?.length ? (
 // Tag
 const Tag = ({ label, color, bg }) => <span style={{ background:bg||"#f1f5f9",color:color||T.muted,borderRadius:20,padding:"3px 10px",fontSize:11,fontWeight:600,whiteSpace:"nowrap" }}>{label}</span>;
 
-// ─────────────────────────────────────────────
+
 // BUY/SELL MODAL — supports fractional shares
-// ─────────────────────────────────────────────
+
 function TradeModal({ ticker, type, stock, cash, existingShares, onConfirm, onClose }) {
   const [mode, setMode]     = useState("shares"); // "shares" | "dollars"
   const [shares, setShares] = useState(1);
@@ -378,9 +355,8 @@ function TradeModal({ ticker, type, stock, cash, existingShares, onConfirm, onCl
   );
 }
 
-// ─────────────────────────────────────────────
 // ONBOARDING
-// ─────────────────────────────────────────────
+
 const INTERESTS = [
   { id:"tech",       label:"Technology",  icon:"💻", tickers:["AAPL","NVDA","MSFT","AMD"] },
   { id:"finance",    label:"Finance",     icon:"🏦", tickers:["JPM","GS","PYPL","COIN"] },
@@ -499,9 +475,9 @@ function Onboarding({ onComplete }) {
   );
 }
 
-// ─────────────────────────────────────────────
+
 // ISOLATED CHAT PANEL (fixes input focus bug)
-// ─────────────────────────────────────────────
+
 const ChatPanel = memo(({ positions, cash, totalValue, totalGainPct, watchlist, LIVE }) => {
   const [msgs, setMsgs]       = useState([{ role:"assistant", content:"Hey! 👋 I'm your paper trading assistant. Ask me anything about stocks, your portfolio, or how markets work." }]);
   const [input, setInput]     = useState("");
@@ -582,9 +558,8 @@ const ChatPanel = memo(({ positions, cash, totalValue, totalGainPct, watchlist, 
   );
 });
 
-// ─────────────────────────────────────────────
 // MAIN APP
-// ─────────────────────────────────────────────
+
 export default function App() {
   const [view, setView]             = useState("home");
   const [selected, setSelected]     = useState(null);
