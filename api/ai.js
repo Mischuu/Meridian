@@ -1,17 +1,3 @@
-
-//api/ai.js — Vercel Serverless Function
-// Secure proxy for Google Gemini API (FREE tier).
-//The GEMINI_API_KEY never touches the frontend — it lives only here,
-// loaded from Vercel's environment variables at runtime.
- //FREE SETUP:
- //1. Go to https://aistudio.google.com
- //2. Click "Get API key" → Create API key (no credit card needed)
- //3. Add to Vercel: Settings → Environment Variables → GEMINI_API_KEY
- //4. Also add to your local .env.local for development
- //Free tier limits (as of 2025):
- //- gemini-2.0-flash: 15 requests/minute, 1,500 requests/day — plenty for personal use
-
-
 export default async function handler(req, res) {
   // Only allow POST requests
   if (req.method !== "POST") {
@@ -30,7 +16,7 @@ export default async function handler(req, res) {
   }
  
   try {
-    // Combine system prompt + user message (Gemini 2.0 Flash handles this well)
+    
     const fullPrompt = system
       ? `${system}\n\n---\n\n${message}`
       : message;
@@ -68,7 +54,7 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: data.error.message || "Gemini API error" });
     }
  
-    // Extract the text response
+    
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
  
     if (!text) {
