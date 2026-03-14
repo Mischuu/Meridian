@@ -1,10 +1,10 @@
 
-
 import { useState, useRef, useEffect, useMemo, useCallback, memo } from "react";
 import {
   AreaChart, Area, LineChart, Line, BarChart, Bar,
   XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, ReferenceLine,
 } from "recharts";
+
 
 // FIREBASE: Vite imports
 
@@ -33,9 +33,9 @@ async function fbLoad(uid) {
   } catch(e) { console.error("Firestore load failed:", e); return null; }
 }
 
-// ─────────────────────────────────────────────
+
 // DATA LAYER
-// ─────────────────────────────────────────────
+
 function genHistory(base, days, vol = 0.016) {
   const h = [];
   let p = base * (0.84 + Math.random() * 0.08);
@@ -168,9 +168,9 @@ const aiView     = (t,s,n)  => callAI("Research analyst for student investors. P
 const aiMarket   = (movers) => callAI("You write a brief, energetic daily market summary for student investors. Under 100 words. Be clear and engaging.", `Today's market snapshot:\nTop gainers: ${movers.gainers.map(s=>`${s.ticker} +${s.pct.toFixed(1)}%`).join(", ")}\nTop losers: ${movers.losers.map(s=>`${s.ticker} ${s.pct.toFixed(1)}%`).join(", ")}\nIndices: S&P 500 +0.57%, NASDAQ +0.82%\n\nWrite a 2-3 sentence "Today in Markets" brief for students. Include overall sentiment (Bullish/Neutral/Bearish).`);
 const aiChat     = (msg,ctx) => callAI("Friendly finance teacher for students using a paper trading app. Only use provided data. Keep responses short and clear. Don't recommend real trades.", `Context:\n${ctx}\n\nStudent: ${msg}`);
 
-// ─────────────────────────────────────────────
+
 // LIVE DATA
-// ─────────────────────────────────────────────
+
 async function fetchQuote(ticker)   { try { const r=await fetch(`/api/quote?ticker=${ticker}`);   const d=await r.json(); return d.error?null:d; } catch{return null;} }
 async function fetchHistory(ticker) { try { const r=await fetch(`/api/history?ticker=${ticker}`); const d=await r.json(); return Array.isArray(d)&&d.length?d:null; } catch{return null;} }
 
@@ -193,9 +193,9 @@ const fmt = {
 const card  = (x={}) => ({background:T.surface,border:`1px solid ${T.border}`,borderRadius:T.r,padding:18,...x});
 const lbl   = {fontSize:11,color:T.muted,fontWeight:600,letterSpacing:"0.06em",textTransform:"uppercase",marginBottom:6};
 
-
+// ─────────────────────────────────────────────
 // TOOLTIP COMPONENT
-
+// ─────────────────────────────────────────────
 function InfoTip({ term }) {
   const [show, setShow] = useState(false);
   const tip = TOOLTIPS[term];
@@ -218,9 +218,9 @@ function InfoTip({ term }) {
   );
 }
 
-
+// ─────────────────────────────────────────────
 // AI PANEL
-
+// ─────────────────────────────────────────────
 function AIPanel({ text, loading, error, label }) {
   if (!loading&&!text&&!error) return null;
   return (
@@ -240,8 +240,9 @@ function AIPanel({ text, loading, error, label }) {
   );
 }
 
+// ─────────────────────────────────────────────
 // PRICE CELL with pulse animation
-
+// ─────────────────────────────────────────────
 function PriceCell({ value, up }) {
   const [pulse, setPulse] = useState(null);
   const prev = useRef(value);
@@ -272,9 +273,9 @@ const ChartTip = ({ active, payload }) => active&&payload?.length ? (
 // Tag
 const Tag = ({ label, color, bg }) => <span style={{ background:bg||"#f1f5f9",color:color||T.muted,borderRadius:20,padding:"3px 10px",fontSize:11,fontWeight:600,whiteSpace:"nowrap" }}>{label}</span>;
 
-
+// ─────────────────────────────────────────────
 // BUY/SELL MODAL — supports fractional shares
-
+// ─────────────────────────────────────────────
 function TradeModal({ ticker, type, stock, cash, existingShares, onConfirm, onClose }) {
   const [mode, setMode]     = useState("shares"); // "shares" | "dollars"
   const [shares, setShares] = useState(1);
@@ -355,8 +356,9 @@ function TradeModal({ ticker, type, stock, cash, existingShares, onConfirm, onCl
   );
 }
 
+// ─────────────────────────────────────────────
 // ONBOARDING
-
+// ─────────────────────────────────────────────
 const INTERESTS = [
   { id:"tech",       label:"Technology",  icon:"💻", tickers:["AAPL","NVDA","MSFT","AMD"] },
   { id:"finance",    label:"Finance",     icon:"🏦", tickers:["JPM","GS","PYPL","COIN"] },
@@ -475,10 +477,10 @@ function Onboarding({ onComplete }) {
   );
 }
 
-
+// ─────────────────────────────────────────────
 // ISOLATED CHAT PANEL (fixes input focus bug)
-
-const ChatPanel = memo(({ positions, cash, totalValue, totalGainPct, watchlist, LIVE }) => {
+// ─────────────────────────────────────────────
+const ChatPanel = memo(({ positions, cash, totalValue, totalGainPct, watchlist, LIVE, isMobile }) => {
   const [msgs, setMsgs]       = useState([{ role:"assistant", content:"Hey! 👋 I'm your paper trading assistant. Ask me anything about stocks, your portfolio, or how markets work." }]);
   const [input, setInput]     = useState("");
   const [loading, setLoading] = useState(false);
@@ -502,8 +504,8 @@ const ChatPanel = memo(({ positions, cash, totalValue, totalGainPct, watchlist, 
   const SUGGESTIONS = ["How is my portfolio doing?","What's my best trade?","Explain what a P/E ratio means","Which stock is riskiest in my portfolio?","What is beta?","Should I diversify more?"];
 
   return (
-    <div style={{ display:"grid",gridTemplateColumns:"1fr 260px",gap:16 }}>
-      <div style={{ ...card(),display:"flex",flexDirection:"column",height:580 }}>
+    <div style={{ display:"grid",gridTemplateColumns:isMobile?"1fr":"1fr 260px",gap:16,alignItems:"start" }}>
+      <div style={{ ...card(),display:"flex",flexDirection:"column",height:isMobile?"calc(100vh - 200px)":580 }}>
         <p style={{ ...lbl,margin:"0 0 16px" }}>AI Assistant</p>
         <div style={{ flex:1,overflowY:"auto",display:"flex",flexDirection:"column",gap:14,paddingBottom:8 }}>
           {msgs.map((m,i)=>(
@@ -558,8 +560,9 @@ const ChatPanel = memo(({ positions, cash, totalValue, totalGainPct, watchlist, 
   );
 });
 
+// ─────────────────────────────────────────────
 // MAIN APP
-
+// ─────────────────────────────────────────────
 export default function App() {
   const [view, setView]             = useState("home");
   const [selected, setSelected]     = useState(null);
@@ -680,6 +683,15 @@ export default function App() {
     setOnboarded(true);
   };
 
+  // Responsive layout detection
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  const isMobile = windowWidth < 768;
+
   const sectors = ["All",...new Set(Object.values(LIVE).map(s=>s.sector))];
   const screenerData = useMemo(() => Object.values(LIVE).filter(s=>filterSector==="All"||s.sector===filterSector).sort((a,b)=>{const av=a[sortBy.col]??0,bv=b[sortBy.col]??0;return(av>bv?1:-1)*sortBy.dir;}), [LIVE,filterSector,sortBy]);
 
@@ -706,52 +718,76 @@ export default function App() {
       {/* Trade Modal */}
       {modal && <TradeModal ticker={modal.ticker} type={modal.type} stock={LIVE[modal.ticker]} cash={cash} existingShares={positions.find(p=>p.ticker===modal.ticker)?.shares||0} onConfirm={(s)=>handleTrade(modal.ticker,modal.type,s)} onClose={()=>setModal(null)} />}
 
-      {/* NAV */}
-      <nav style={{ background:T.surface,borderBottom:`1px solid ${T.border}`,height:60,display:"flex",alignItems:"center",padding:"0 32px",justifyContent:"space-between",position:"sticky",top:0,zIndex:100 }}>
-        <div style={{ display:"flex",alignItems:"center",gap:10 }}>
-          <div style={{ width:36,height:36,borderRadius:12,background:T.accent,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,color:"#fff",fontWeight:800,flexShrink:0 }}>M</div>
-          <div>
-            <p style={{ fontSize:16,fontWeight:800,color:T.text,margin:0,lineHeight:1 }}>Meridian</p>
-            <p style={{ fontSize:10,color:T.muted,margin:0,fontWeight:600,letterSpacing:"0.04em" }}>PAPER TRADING</p>
+      {/* DESKTOP NAV */}
+      {!isMobile && (
+        <nav style={{ background:T.surface,borderBottom:`1px solid ${T.border}`,height:60,display:"flex",alignItems:"center",padding:"0 32px",justifyContent:"space-between",position:"sticky",top:0,zIndex:100 }}>
+          <div style={{ display:"flex",alignItems:"center",gap:10 }}>
+            <div style={{ width:36,height:36,borderRadius:12,background:T.accent,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,color:"#fff",fontWeight:800,flexShrink:0 }}>M</div>
+            <div>
+              <p style={{ fontSize:16,fontWeight:800,color:T.text,margin:0,lineHeight:1 }}>Meridian</p>
+              <p style={{ fontSize:10,color:T.muted,margin:0,fontWeight:600,letterSpacing:"0.04em" }}>PAPER TRADING</p>
+            </div>
+          </div>
+          <div style={{ display:"flex",gap:2 }}>
+            {navItems.map(([id,label])=>(
+              <button key={id} onClick={()=>setView(id)} style={{ padding:"6px 14px",borderRadius:10,fontSize:13,fontWeight:600,cursor:"pointer",border:"none",background:view===id||(view==="stock"&&id==="trade")?T.accentBg:"transparent",color:view===id||(view==="stock"&&id==="trade")?T.accent:T.muted,transition:"all 0.15s" }}>{label}</button>
+            ))}
+          </div>
+          <div style={{ display:"flex",alignItems:"center",gap:12 }}>
+            {userName && <span style={{ fontSize:13,color:T.muted,fontWeight:500 }}>Hi, {userName} 👋</span>}
+            {user
+              ? <div style={{ display:"flex",alignItems:"center",gap:8 }}>
+                  <div style={{ width:30,height:30,borderRadius:"50%",background:T.accentBg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,color:T.accent }}>{user.displayName?.[0]||user.email?.[0]||"U"}</div>
+                  <button onClick={()=>signOut(auth).then(()=>setUser(null))} style={{ fontSize:11,color:T.muted,background:"none",border:"none",cursor:"pointer" }}>Sign out</button>
+                </div>
+              : <button onClick={()=>signInWithPopup(auth, provider).catch(console.error)} style={{ padding:"7px 16px",borderRadius:10,border:`1px solid ${T.border}`,background:T.surface,fontSize:12,fontWeight:600,cursor:"pointer",color:T.text }}>Sign in with Google</button>
+            }
+            <div>
+              <p style={{ fontSize:11,color:T.muted,margin:0 }}>Balance</p>
+              <p style={{ fontSize:15,fontWeight:800,color:T.text,margin:0 }}>{fmt.price(totalValue)}</p>
+            </div>
+            <div style={{ width:8,height:8,borderRadius:"50%",background:liveLoading?"#f59e0b":T.up,transition:"background 0.5s" }} />
+          </div>
+        </nav>
+      )}
+
+      {/* MOBILE TOP BAR */}
+      {isMobile && (
+        <div style={{ background:T.surface,borderBottom:`1px solid ${T.border}`,height:52,display:"flex",alignItems:"center",padding:"0 16px",justifyContent:"space-between",position:"sticky",top:0,zIndex:100 }}>
+          <div style={{ display:"flex",alignItems:"center",gap:8 }}>
+            <div style={{ width:30,height:30,borderRadius:10,background:T.accent,display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,color:"#fff",fontWeight:800 }}>M</div>
+            <div>
+              <p style={{ fontSize:14,fontWeight:800,color:T.text,margin:0,lineHeight:1 }}>Meridian</p>
+              <p style={{ fontSize:9,color:T.muted,margin:0,fontWeight:600,letterSpacing:"0.04em" }}>PAPER TRADING</p>
+            </div>
+          </div>
+          <div style={{ display:"flex",alignItems:"center",gap:10 }}>
+            <div style={{ textAlign:"right" }}>
+              <p style={{ fontSize:10,color:T.muted,margin:0 }}>Balance</p>
+              <p style={{ fontSize:13,fontWeight:800,color:T.text,margin:0 }}>{fmt.price(totalValue)}</p>
+            </div>
+            {user
+              ? <div onClick={()=>signOut(auth).then(()=>setUser(null))} style={{ width:30,height:30,borderRadius:"50%",background:T.accentBg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,color:T.accent,cursor:"pointer" }}>{user.displayName?.[0]||user.email?.[0]||"U"}</div>
+              : <button onClick={()=>signInWithPopup(auth,provider).catch(console.error)} style={{ padding:"6px 12px",borderRadius:8,border:`1px solid ${T.border}`,background:T.surface,fontSize:11,fontWeight:600,cursor:"pointer",color:T.text }}>Sign in</button>
+            }
+            <div style={{ width:7,height:7,borderRadius:"50%",background:liveLoading?"#f59e0b":T.up }} />
           </div>
         </div>
-        <div style={{ display:"flex",gap:2 }}>
-          {navItems.map(([id,label])=>(
-            <button key={id} onClick={()=>setView(id)} style={{ padding:"6px 14px",borderRadius:10,fontSize:13,fontWeight:600,cursor:"pointer",border:"none",background:view===id||(view==="stock"&&id==="trade")?T.accentBg:"transparent",color:view===id||(view==="stock"&&id==="trade")?T.accent:T.muted,transition:"all 0.15s" }}>{label}</button>
-          ))}
-        </div>
-        <div style={{ display:"flex",alignItems:"center",gap:12 }}>
-          {userName && <span style={{ fontSize:13,color:T.muted,fontWeight:500 }}>Hi, {userName} 👋</span>}
-          {user
-            ? <div style={{ display:"flex",alignItems:"center",gap:8 }}>
-                <div style={{ width:30,height:30,borderRadius:"50%",background:T.accentBg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,color:T.accent }}>{user.displayName?.[0]||user.email?.[0]||"U"}</div>
-                <button onClick={()=>signOut(auth).then(()=>setUser(null))} style={{ fontSize:11,color:T.muted,background:"none",border:"none",cursor:"pointer" }}>Sign out</button>
-              </div>
-            : <button onClick={()=>signInWithPopup(auth, provider).catch(console.error)} style={{ padding:"7px 16px",borderRadius:10,border:`1px solid ${T.border}`,background:T.surface,fontSize:12,fontWeight:600,cursor:"pointer",color:T.text }}>
-                Sign in with Google
-              </button>
-          }
-          <div>
-            <p style={{ fontSize:11,color:T.muted,margin:0 }}>Balance</p>
-            <p style={{ fontSize:15,fontWeight:800,color:T.text,margin:0 }}>{fmt.price(totalValue)}</p>
-          </div>
-          <div style={{ width:8,height:8,borderRadius:"50%",background:liveLoading?"#f59e0b":T.up,transition:"background 0.5s" }} title={liveLoading?"Loading…":"Live data"} />
-        </div>
-      </nav>
+      )}
 
       {/* Indices bar */}
-      <div style={{ background:T.surface,borderBottom:`1px solid ${T.border}`,padding:"6px 32px",display:"flex",gap:28,overflowX:"auto" }}>
+      <div style={{ background:T.surface,borderBottom:`1px solid ${T.border}`,padding:isMobile?"6px 12px":"6px 32px",display:"flex",gap:isMobile?16:28,overflowX:"auto",WebkitOverflowScrolling:"touch" }}>
         {INDICES.map(i=>(
-          <div key={i.name} style={{ flexShrink:0,display:"flex",alignItems:"center",gap:6 }}>
-            <span style={{ fontSize:11,color:T.muted,fontWeight:500 }}>{i.name}</span>
-            <span style={{ fontSize:12,fontWeight:700,color:T.text }}>{i.val}</span>
-            <span style={{ fontSize:11,color:i.up?T.up:T.down,fontWeight:600 }}>{i.chg}</span>
+          <div key={i.name} style={{ flexShrink:0,display:"flex",alignItems:"center",gap:4 }}>
+            <span style={{ fontSize:10,color:T.muted,fontWeight:500 }}>{i.name}</span>
+            <span style={{ fontSize:11,fontWeight:700,color:T.text }}>{i.val}</span>
+            <span style={{ fontSize:10,color:i.up?T.up:T.down,fontWeight:600 }}>{i.chg}</span>
           </div>
         ))}
       </div>
 
       {/* PAGE CONTENT */}
-      <div style={{ padding:"20px 32px" }}>
+      <div style={{ padding:isMobile?"12px 12px 80px":"20px 32px" }}>
 
         {/* ── HOME ── */}
         {view==="home" && (()=>{
@@ -761,7 +797,7 @@ export default function App() {
           return (
             <div>
               {/* Summary row */}
-              <div style={{ display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12,marginBottom:20 }}>
+              <div style={{ display:"grid",gridTemplateColumns:isMobile?"1fr 1fr":"repeat(4,1fr)",gap:12,marginBottom:20 }}>
                 {[
                   { label:"Total Balance", value:fmt.price(totalValue), sub:totalGain>=0?`▲ ${fmt.price(Math.abs(totalGain))} (${fmt.pct(totalGainPct)})`:`▼ ${fmt.price(Math.abs(totalGain))} (${fmt.pct(totalGainPct)})`, subColor:totalGain>=0?T.up:T.down },
                   { label:"Cash Available", value:fmt.price(cash), sub:`${((cash/STARTING_BALANCE)*100).toFixed(0)}% of start`, subColor:T.muted },
@@ -792,7 +828,7 @@ export default function App() {
                 </div>
               </div>
 
-              <div style={{ display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:16 }}>
+              <div style={{ display:"grid",gridTemplateColumns:isMobile?"1fr":"1fr 1fr 1fr",gap:isMobile?12:16 }}>
                 {/* Gainers */}
                 <div style={card()}>
                   <p style={lbl}>🟢 Top Gainers</p>
@@ -855,7 +891,7 @@ export default function App() {
                   style={{ background:T.accent,border:"none",borderRadius:10,padding:"8px 16px",fontSize:13,fontWeight:700,color:"#fff",cursor:"pointer" }}>+</button>
               </div>
             </div>
-            <div style={{ display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))",gap:12 }}>
+            <div style={{ display:"grid",gridTemplateColumns:isMobile?"1fr 1fr":"repeat(auto-fill,minmax(260px,1fr))",gap:isMobile?10:12 }}>
               {watchlist.map(t=>{
                 const s=LIVE[t]; if(!s) return null;
                 const up=s.pct>=0, risk=RISK(s.beta,s.pe), pos=positions.find(p=>p.ticker===t);
@@ -910,7 +946,7 @@ export default function App() {
           return (
             <div>
               <button onClick={()=>setView("trade")} style={{ background:"none",border:"none",color:T.accent,cursor:"pointer",fontSize:13,fontWeight:600,padding:0,marginBottom:16 }}>← Back to Markets</button>
-              <div style={{ display:"grid",gridTemplateColumns:"1fr 320px",gap:16 }}>
+              <div style={{ display:"grid",gridTemplateColumns:isMobile?"1fr":"1fr 320px",gap:16 }}>
                 <div>
                   <div style={{ ...card(),marginBottom:14 }}>
                     <div style={{ display:"flex",justifyContent:"space-between",alignItems:"flex-start" }}>
@@ -1044,7 +1080,7 @@ export default function App() {
         {view==="portfolio" && (
           <div>
             <h2 style={{ fontSize:20,fontWeight:800,margin:"0 0 16px",color:T.text }}>My Portfolio</h2>
-            <div style={{ display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12,marginBottom:20 }}>
+            <div style={{ display:"grid",gridTemplateColumns:isMobile?"1fr 1fr":"repeat(4,1fr)",gap:12,marginBottom:20 }}>
               {[["Total Value",fmt.price(totalValue),totalGain>=0?T.up:T.down],["Cash",fmt.price(cash),T.muted],["Invested",fmt.price(investedValue),T.muted],["Total Return",fmt.pct(totalGainPct),totalGainPct>=0?T.up:T.down]].map(([label,val,color])=>(
                 <div key={label} style={card()}>
                   <p style={lbl}>{label}</p>
@@ -1052,7 +1088,7 @@ export default function App() {
                 </div>
               ))}
             </div>
-            <div style={{ display:"grid",gridTemplateColumns:"1fr 300px",gap:16 }}>
+            <div style={{ display:"grid",gridTemplateColumns:isMobile?"1fr":"1fr 300px",gap:16 }}>
               <div style={card()}>
                 <p style={{ ...lbl,marginBottom:16 }}>Open Positions</p>
                 {positions.length===0 ? (
@@ -1154,7 +1190,7 @@ export default function App() {
           <div>
             <h2 style={{ fontSize:20,fontWeight:800,margin:"0 0 6px",color:T.text }}>Learning Center</h2>
             <p style={{ fontSize:14,color:T.muted,margin:"0 0 20px" }}>Understand the terms you see while trading. Hover the ? on any metric for an instant explanation.</p>
-            <div style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16 }}>
+            <div style={{ display:"grid",gridTemplateColumns:isMobile?"1fr":"repeat(3,1fr)",gap:isMobile?12:16 }}>
               {Object.entries(TOOLTIPS).map(([term,tip])=>(
                 <div key={term} style={card()}>
                   <div style={{ display:"flex",alignItems:"center",gap:10,marginBottom:12 }}>
@@ -1195,9 +1231,30 @@ export default function App() {
             totalGainPct={totalGainPct}
             watchlist={watchlist}
             LIVE={LIVE}
+            isMobile={isMobile}
           />
         )}
       </div>
+
+      {/* MOBILE BOTTOM TAB BAR */}
+      {isMobile && (
+        <div style={{ position:"fixed",bottom:0,left:0,right:0,background:T.surface,borderTop:`1px solid ${T.border}`,display:"flex",zIndex:100,paddingBottom:"env(safe-area-inset-bottom)" }}>
+          {[
+            ["home","⌂","Home"],
+            ["trade","◎","Markets"],
+            ["portfolio","▤","Portfolio"],
+            ["learn","◑","Learn"],
+            ["chat","◉","AI"],
+          ].map(([id,icon,label])=>(
+            <button key={id} onClick={()=>setView(id)}
+              style={{ flex:1,padding:"10px 0 8px",border:"none",background:"transparent",display:"flex",flexDirection:"column",alignItems:"center",gap:3,cursor:"pointer",color:view===id||(view==="stock"&&id==="trade")?T.accent:T.muted,transition:"color 0.15s" }}>
+              <span style={{ fontSize:18,lineHeight:1 }}>{icon}</span>
+              <span style={{ fontSize:10,fontWeight:view===id||(view==="stock"&&id==="trade")?700:500 }}>{label}</span>
+              {(view===id||(view==="stock"&&id==="trade")) && <div style={{ width:20,height:3,borderRadius:2,background:T.accent }} />}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
