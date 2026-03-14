@@ -4,6 +4,8 @@
 
 **Live Demo:** https://meridian-lac-seven.vercel.app/
 
+![Meridian Dashboard](./public/screenshot.png)
+
 ---
 
 ## What it does
@@ -143,8 +145,11 @@ The AI layer was designed to teach, not to replace thinking. It explains, it sum
 - [ ] Persistent leaderboard with real user accounts
 - [ ] Portfolio performance chart over time
 - [ ] Price alerts and notifications
-- [ ] Mobile-responsive layout
 - [ ] Multi-currency support
+- [ ] Turning the AI Tutor into an active agent that can execute 'suggested' rebalancing trades based on user goals.
+- [ ] Integrating Langwatch for LLM observability to track the quality of the AI's bull/bear case summaries.
+- [ ] Mobile-responsive layout
+- [ ] Turning it into a free App
 
 ---
 
