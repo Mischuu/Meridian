@@ -4,7 +4,7 @@ import { getAnalytics } from "firebase/analytics";
 // Firebase configuration
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDRldwJTYPn1chtDnoCAO5FoqQaeuqmeR0",
+  apiKey: "",
   authDomain: "meridian-1b7e7.firebaseapp.com",
   projectId: "meridian-1b7e7",
   storageBucket: "meridian-1b7e7.firebasestorage.app",
